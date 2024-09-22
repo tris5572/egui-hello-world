@@ -3,6 +3,10 @@ Rust 製の GUI ライブラリである [egui](https://github.com/emilk/egui) �
 
 [2021年末に基本的な使い方を記事にまとめていた](https://zenn.dev/tris/articles/rust-egui-01)が、2024年9月次点ではバージョンが当時の `0.15` から `0.28` に上がっていてかなり変化があるため、改めて試してみた。
 
+サンプルのアプリケーションを動かし、日本語の入力・表示までを実装した。
+
+![alt text](screenshot.png)
+
 
 ## 依存関係
 
@@ -18,7 +22,6 @@ cargo add eframe
 cargo add egui_extras --features="image"
 ```
 
-
 ## 画像の準備
 
 [画像ファイル](https://github.com/emilk/egui/blob/master/crates/egui/assets/ferris.png)をダウンロードする。
@@ -28,7 +31,7 @@ cargo add egui_extras --features="image"
 
 ## コーディング
 
-`main.rs` を記述する。
+`src/main.rs` を記述する。
 
 [元のソース](https://github.com/emilk/egui/blob/master/examples/hello_world/src/main.rs)をコピペしてきたものから、一部以下のような修正を加えている。
 
@@ -50,7 +53,7 @@ cargo run
 
 フォントのファイルを、プロジェクト内に配置する。例えば [Google から Noto Sans JP をダウンロードしてくる](https://fonts.google.com/noto/specimen/Noto+Sans+JP)など。
 
-フォントを読み込んでセットするために `MyApp` に `new()` を定義して、処理を書く。記載内容は実際のコードを参照。
+フォントを読み込んでセットするために `MyApp` に `new()` を定義して、処理を書く。記載内容は `src/main.rs` のコードを参照。
 
 `main()` の `eframe::run_native` で、直接 `MyApp::default` を返すのではなく、`MyApp::new()` を使用する。
 
