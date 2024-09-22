@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // Windows のリリースビルド時にコンソールウィンドウを隠す
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
-use eframe::egui;
+use eframe::egui::{self, FontData, FontDefinitions, FontFamily};
 
 fn main() -> eframe::Result {
     // ログ出力は行わないため、コメントアウト
@@ -17,7 +17,9 @@ fn main() -> eframe::Result {
             // 画像表示を行うための準備
             egui_extras::install_image_loaders(&cc.egui_ctx);
 
-            Ok(Box::<MyApp>::default())
+            // フォント追加のために new を使用する
+            Ok(Box::new(MyApp::new(cc)))
+            // Ok(Box::<MyApp>::default())
         }),
     )
 }
@@ -25,6 +27,25 @@ fn main() -> eframe::Result {
 struct MyApp {
     name: String,
     age: u32,
+}
+
+impl MyApp {
+    // カスタムフォントを追加するために定義
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        let mut fonts = FontDefinitions::default();
+        fonts.font_data.insert(
+            "my_font".to_owned(),
+            FontData::from_static(include_bytes!("../assets/fonts/NotoSansJP-Regular.ttf")),
+        );
+        fonts
+            .families
+            .get_mut(&FontFamily::Proportional)
+            .unwrap()
+            .insert(0, "my_font".to_owned());
+        cc.egui_ctx.set_fonts(fonts);
+
+        Self::default()
+    }
 }
 
 impl Default for MyApp {
@@ -41,7 +62,7 @@ impl eframe::App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("My egui Application");
             ui.horizontal(|ui| {
-                let name_label = ui.label("Your name: ");
+                let name_label = ui.label("Your name(名前): ");
                 ui.text_edit_singleline(&mut self.name)
                     .labelled_by(name_label.id);
             });
