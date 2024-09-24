@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // Windows のリリースビルド時にコンソールウィンドウを隠す
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
-use eframe::egui::{self, FontData, FontDefinitions, FontFamily};
+use eframe::egui::{self, FontData, FontDefinitions, FontFamily, TextEdit};
 
 fn main() -> eframe::Result {
     // ログ出力は行わないため、コメントアウト
@@ -59,12 +59,18 @@ impl Default for MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // let text_input = TextEdit::singleline(&mut self.name);
+        // text_input.return_key(None);
+
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("My egui Application");
             ui.horizontal(|ui| {
                 let name_label = ui.label("Your name(名前): ");
-                ui.text_edit_singleline(&mut self.name)
-                    .labelled_by(name_label.id);
+                // ui.text_edit_singleline(&mut self.name)
+                //     .labelled_by(name_label.id);
+                // エンターキーを押下してもフォーカスが外れないように設定したテキストフィールドを配置
+                ui.add(TextEdit::singleline(&mut self.name).return_key(None))
+                    .labelled_by(name_label.id)
             });
             ui.add(egui::Slider::new(&mut self.age, 0..=120).text("age"));
             if ui.button("Increment").clicked() {

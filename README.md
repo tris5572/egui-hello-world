@@ -1,9 +1,7 @@
 
-Rust 製の GUI ライブラリである [egui](https://github.com/emilk/egui) のサンプルである [hello_world](https://github.com/emilk/egui/tree/master/examples/hello_world) を動かしてみたメモ。
+Rust 製の GUI ライブラリである [egui](https://github.com/emilk/egui) のサンプルである [hello_world](https://github.com/emilk/egui/tree/master/examples/hello_world) を動かしてみて、日本語対応（入力・表示）を加えてみた実験のメモ。
 
 [2021年末に基本的な使い方を記事にまとめていた](https://zenn.dev/tris/articles/rust-egui-01)が、2024年9月次点ではバージョンが当時の `0.15` から `0.28` に上がっていてかなり変化があるため、改めて試してみた。
-
-サンプルのアプリケーションを動かし、日本語の入力・表示までを実装した。
 
 ![alt text](screenshot.png)
 
@@ -49,7 +47,7 @@ cargo run
 これにより、ローカルでネイティブアプリとして実行される。
 
 
-## (オプション) 日本語の対応
+## (オプション) 日本語の対応（表示・入力）
 
 フォントのファイルを、プロジェクト内に配置する。例えば [Google から Noto Sans JP をダウンロードしてくる](https://fonts.google.com/noto/specimen/Noto+Sans+JP)など。
 
@@ -58,3 +56,9 @@ cargo run
 `main()` の `eframe::run_native` で、直接 `MyApp::default` を返すのではなく、`MyApp::new()` を使用する。
 
 なおフォントの設定についての[公式ドキュメントはここ](https://docs.rs/egui/latest/egui/struct.FontDefinitions.html)で、[サンプルもある](https://github.com/emilk/egui/blob/master/examples/custom_font/src/main.rs)。
+
+## (オプション) 日本語の対応（変換確定時の挙動のカスタマイズ）
+
+なお、1行のテキストフィールドにおいて、デフォルトではエンターキーを押下したときにフォーカスが外れる動作となっている。これは IME の変換確定のエンターキーにおいても同様であるため、日本語環境における自然な挙動を実現するためには、これを無効化するのが望ましい。
+
+そのためには [`TextEdit` の `return_key`](https://docs.rs/egui/latest/egui/widgets/text_edit/struct.TextEdit.html#method.return_key) に `None` をセットする。そしてこの `TextEdit` を使って（` ui.text_edit_singleline` を使わずに） UI を構築すればよい。
